@@ -53,7 +53,7 @@ def processFrame(frame):
             playsound(files[0])
         else:
             playsound(files[1])
-    print(predictions)
+    # print(predictions)
 
 
 while True:
@@ -88,5 +88,5 @@ for item in frames:  # shows all the captures frames
 
 
 # Release handle to the webcam
-# video_capture.release()
-# cv2.destroyAllWindows()
+video_capture.release()
+cv2.destroyAllWindows()
