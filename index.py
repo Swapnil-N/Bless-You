@@ -33,7 +33,7 @@ def processFrame(frame):
     resized = Image.fromarray(frame).resize(IMAGE_SHAPE)
     npimg = np.array(resized)/255.0
     predictions = model.predict(npimg[np.newaxis, ...])[0]
-    if predictions[Category.COUGHING] >= 0.65:
+    if predictions[Category.COUGHING] >= 0.75:
         files = ['sixfeet.mp3', 'mask.mp3']
         if (random.randint(0, 9) % 2 == 0):
             playsound(files[0])
