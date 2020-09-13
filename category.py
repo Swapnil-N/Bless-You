@@ -1,4 +1,7 @@
 class Category:
-    NORMAL = "normal"
-    SCRATCHING = "scratching"
-    SNEEZING = "sneezing"
+    COUGHING = 0
+    NORMAL = 1
+    SCRATCHING = 2
+    SNEEZING = 3
+    YAWNING = 4
+    categories = [COUGHING, NORMAL, SCRATCHING, SNEEZING, YAWNING]

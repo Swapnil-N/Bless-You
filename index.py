@@ -3,11 +3,13 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 import os
 import numpy as np
+import random
 
 import matplotlib.pyplot as plt
 import PIL.Image as Image
 
 from category import Category
+from playsound import playsound
 
 # Get a reference to webcam #0 (the default one)
 video_capture = cv2.VideoCapture(0)
@@ -22,7 +24,7 @@ model = tf.keras.models.load_model(model_path)
 
 IMAGE_SHAPE = (224, 224)
 
-categories = [Category.NORMAL, Category.SCRATCHING, Category.SNEEZING]
+text = False
 
 
 def processFrame(frame):
@@ -30,21 +32,47 @@ def processFrame(frame):
     frames.append(frame)
     resized = Image.fromarray(frame).resize(IMAGE_SHAPE)
     npimg = np.array(resized)/255.0
-    predictions = model.predict(npimg[np.newaxis, ...]))
+    predictions = model.predict(npimg[np.newaxis, ...])[0]
+    if predictions[Category.COUGHING] >= 0.65:
+        files = ['sixfeet.mp3', 'mask.mp3']
+        if (random.randint(0, 9) % 2 == 0):
+            playsound(files[0])
+        else:
+            playsound(files[1])
+    if predictions[Category.SCRATCHING] >= 0.65:
+        files = ['confused.mp3', 'lice.mp3']
+        if (random.randint(0, 9) % 2 == 0):
+            playsound(files[0])
+        else:
+            playsound(files[1])
+    if predictions[Category.SNEEZING] >= 0.65:
+        playsound('blessYou.mp3')
+    if predictions[Category.YAWNING] >= 0.65:
+        files = ['fly.mp3', 'get-up.mp3']
+        if (random.randint(0, 9) % 2 == 0):
+            playsound(files[0])
+        else:
+            playsound(files[1])
+    print(predictions)
 
 
 while True:
     # Grab a single frame of video
-    ret, frame=video_capture.read()
+    ret, frame = video_capture.read()
 
     # Resize frame of video to 1/4 size for easier compute if needed
     # small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
     # Only process frames depending on counter of video to save space and compute
-    if counter == 30:
+    if counter == 5:
         processFrame(frame)
-        counter=0
+        counter = 0
+        text = not text
     counter += 1
+
+    # if text:
+    #     font = cv2.FONT_HERSHEY_DUPLEX
+    #     cv2.putText(frame, "HIII", (100, 100), font, 1.0, (255, 255, 255), 1)
 
     # Display each frame AKA the video
     cv2.imshow('Video', frame)
