@@ -19,7 +19,7 @@ frames = []
 counter = 0
 
 # https://www.tensorflow.org/tutorials/images/transfer_learning_with_hub
-model_path = './saved_models/1599964712'
+model_path = './saved_models/1599978636'
 model = tf.keras.models.load_model(model_path)
 
 IMAGE_SHAPE = (224, 224)
