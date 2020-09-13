@@ -33,28 +33,34 @@ def processFrame(frame):
     resized = Image.fromarray(frame).resize(IMAGE_SHAPE)
     npimg = np.array(resized)/255.0
     predictions = model.predict(npimg[np.newaxis, ...])[0]
+    print(predictions)
     if predictions[Category.COUGHING] >= 0.75:
         files = ['sixfeet.mp3', 'mask.mp3']
         if (random.randint(0, 9) % 2 == 0):
             playsound(files[0])
         else:
             playsound(files[1])
+        return 1
     if predictions[Category.SCRATCHING] >= 0.65:
         files = ['confused.mp3', 'lice.mp3']
         if (random.randint(0, 9) % 2 == 0):
             playsound(files[0])
         else:
             playsound(files[1])
+        return 1
     if predictions[Category.SNEEZING] >= 0.65:
         playsound('blessYou.mp3')
+        return 1
     if predictions[Category.YAWNING] >= 0.65:
         files = ['fly.mp3', 'get-up.mp3']
         if (random.randint(0, 9) % 2 == 0):
             playsound(files[0])
         else:
             playsound(files[1])
-    # print(predictions)
+        return 1
 
+
+delay = 10
 
 while True:
     # Grab a single frame of video
@@ -65,14 +71,11 @@ while True:
 
     # Only process frames depending on counter of video to save space and compute
     if counter == 5:
-        processFrame(frame)
         counter = 0
-        text = not text
-    counter += 1
+        if processFrame(frame):
+            counter -= delay
 
-    # if text:
-    #     font = cv2.FONT_HERSHEY_DUPLEX
-    #     cv2.putText(frame, "HIII", (100, 100), font, 1.0, (255, 255, 255), 1)
+    counter += 1
 
     # Display each frame AKA the video
     cv2.imshow('Video', frame)
